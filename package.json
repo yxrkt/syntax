@@ -1,0 +1,26 @@
+{
+    "name": "overload",
+    "displayName": "Overload",
+    "description": "Overload language support",
+    "version": "0.0.1",
+    "publisher": "aserio",
+    "engines": {
+        "vscode": "^1.28.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "overload",
+            "aliases": ["Overload", "overload"],
+            "extensions": ["ovl"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "overload",
+            "scopeName": "source.overload",
+            "path": "./syntaxes/overload.tmLanguage.json"
+        }]
+    }
+}
