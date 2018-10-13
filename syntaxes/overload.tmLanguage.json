@@ -8,6 +8,9 @@
         },
         {
             "include": "#expressions"
+        },
+        {
+            "include": "#definitions"
         }
     ],
     "repository": {
@@ -27,9 +30,13 @@
                 },
                 {
                     "include": "#bindings"
-                },
+                }
+            ]
+        },
+        "definitions": {
+            "patterns": [
                 {
-                    "include": "#keywords"
+                    "include": "#function-definition"
                 }
             ]
         },
@@ -81,15 +88,50 @@
                 }
             ]
         },
+        "function-definition": {
+            "name": "meta.function.overload",
+            "begin": "(^ *)(?=fun +)",
+            "end": "\\1",
+            "patterns": [
+                {
+                    "name": "meta.function.signature.overload",
+                    "begin": "(?=fun)",
+                    "end": "=",
+                    "patterns": [
+                        {
+                            "name": "meta.function.keyword-and-name",
+                            "match": "(fun) +(_\\w+|[a-zA-Z]\\w*)\\s*",
+                            "captures": {
+                                "1": {
+                                    "name": "keyword.other.overload"
+                                },
+                                "2": {
+                                    "name": "entity.name.function.overload"
+                                }
+                            }
+                        },
+                        {
+                            "match": "((_\\w+|[a-zA-Z]\\w*)(?: *(:) +(\\g<2>))?)(?:(?: *; *|\\s*?\\n\\s*?)\\g<1>)*",
+                            "captures": {
+                                "1": {
+                                    "name": "variable.parameter.overload"
+                                },
+                                "2": {
+                                    "name": "keyword.operator.type.annotation.overload"
+                                },
+                                "3": {
+                                    "name": "entity.name.type"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
         "bindings": {
             "patterns": [
                 {
-                    "begin": "(?=\\s+let )",
-                    "end": "(?<==)",
-                    "match": "let +(_\\w+|[a-zA-Z]\\w*)(\\s+(?:(_\\w+|[a-zA-Z]\\w*)( *(:) +((_\\w+|[a-zA-Z]\\w*)\\??)))+)? *="
-                },
-                {
-                    "begin": "(let|signal) +(_\\w+|[a-zA-Z]\\w*)( *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *",
+                    "begin": "^ *(let|signal) +(_\\w+|[a-zA-Z]\\w*)(?: *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.overload"
@@ -97,10 +139,10 @@
                         "2": {
                             "name": "variable.name.overload"
                         },
-                        "4": {
-                            "name": "keyword.symbol.overload"
+                        "3": {
+                            "name": "keyword.operator.type.annotation.overload"
                         },
-                        "5": {
+                        "4": {
                             "name": "entity.name.type"
                         }
                     },
@@ -115,10 +157,6 @@
         },
         "keywords": {
             "patterns": [
-                {
-                    "name": "keyword.other.overload",
-                    "match": "(if|then|elif|else|let|signal)"
-                },
                 {
                     "name": "keyword.control.overload",
                     "match": "raise"
