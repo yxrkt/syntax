@@ -1,34 +1,48 @@
 {
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "Overload",
+    "scopeName": "source.overload",
     "patterns": [
         {
-            "include": "#functions"
+            "include": "#comments"
         },
         {
-            "include": "#bindings"
-        },
-        {
-            "include": "#keywords"
-        },
-        {
-            "include": "#strings"
+            "include": "#expressions"
         }
     ],
     "repository": {
-        "keywords": {
+        "comments": {
+            "name": "comments",
             "patterns": [
                 {
-                    "name": "keyword.other.overload",
-                    "match": "\\b(if|then|elif|else|let|signal)\\b"
+                    "name": "comment.line.double-slash.overload",
+                    "match": "//.*"
+                }
+            ]
+        },
+        "expressions": {
+            "patterns": [
+                {
+                    "include": "#literals"
                 },
                 {
-                    "name": "keyword.control.overload",
-                    "match": "\\b(raise)\\b"
+                    "include": "#bindings"
                 },
                 {
-                    "name": "storage.modifier.overload",
-                    "match": "public"
+                    "include": "#keywords"
+                }
+            ]
+        },
+        "literals": {
+            "patterns": [
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#numbers"
+                },
+                {
+                    "include": "#booleans"
                 }
             ]
         },
@@ -43,17 +57,39 @@
                 }
             ]
         },
-        "functions": {
-            "begin": "<@",
-            "end": "@>",
+        "numbers": {
             "patterns": [
-
+                {
+                    "name": "constant.numeric.overload",
+                    "match": "\\b(?<!\\.)([1-9]\\d*)(%|(px|s)?\\b)(?!\\.)"
+                },
+                {
+                    "name": "constant.numeric.overload",
+                    "match": "\\b(([1-9]\\d*|0)\\.\\d+)(%|(px|s)?\\b)"
+                },
+                {
+                    "name": "constant.other.color.rgb-value.hex.overload",
+                    "match": "#([0-9a-fA-F]{8}|[0-9a-fA-F]{6})\\b"
+                }
+            ]
+        },
+        "booleans": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.overload",
+                    "match": "(true|false)"
+                }
             ]
         },
         "bindings": {
             "patterns": [
                 {
-                    "begin": "(let|signal) +([a-zA-Z]\\w*)((:) +([a-zA-Z]\\w*\\??))? *",
+                    "begin": "(?=\\s+let )",
+                    "end": "(?<==)",
+                    "match": "let +(_\\w+|[a-zA-Z]\\w*)(\\s+(?:(_\\w+|[a-zA-Z]\\w*)( *(:) +((_\\w+|[a-zA-Z]\\w*)\\??)))+)? *="
+                },
+                {
+                    "begin": "(let|signal) +(_\\w+|[a-zA-Z]\\w*)( *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.overload"
@@ -68,17 +104,30 @@
                             "name": "entity.name.type"
                         }
                     },
-                    "end": "="
+                    "end": "=",
+                    "endCaptures": {
+                        "0": {
+                            "name": "keyword.operator.assignment.overload"
+                        }
+                    }
                 }
             ]
         },
-        "identifier": {
+        "keywords": {
             "patterns": [
                 {
-                    "match": "[a-zA-Z]\\w*"
+                    "name": "keyword.other.overload",
+                    "match": "(if|then|elif|else|let|signal)"
+                },
+                {
+                    "name": "keyword.control.overload",
+                    "match": "raise"
+                },
+                {
+                    "name": "support.type.primitive.overload",
+                    "match": "(bool|float|int|color)"
                 }
             ]
         }
-    },
-    "scopeName": "source.overload"
+    }
 }
