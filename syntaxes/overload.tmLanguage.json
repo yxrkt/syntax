@@ -61,26 +61,22 @@
         "ghetto": {
             "patterns": [
                 {
-                    "begin": "\\s([a-z]\\w*)",
-                    "beginCaptures": {
+                    "match": "(?<=\\s)([a-z]\\w*)(?:(\\.)(_\\w+|[a-zA-Z]\\w*))*",
+                    "captures": {
                         "1": {
                             "name": "variable.other.object.overload"
+                        },
+                        "2": {
+                            "name": "punctuation.accessor.overload"
+                        },
+                        "3": {
+                            "name": "variable.other.object.property.overload"
                         }
-                    },
-                    "end": "(?=\\s)",
-                    "patterns": [
-                        {
-                            "match": "(\\.)(_\\w+|[a-zA-Z]\\w*)",
-                            "captures": {
-                                "1": {
-                                    "name": "punctuation.accessor.overload"
-                                },
-                                "2": {
-                                    "name": "variable.other.object.property.overload"
-                                }
-                            }
-                        }
-                    ]
+                    }
+                },
+                {
+                    "name": "entity.name.function.overload",
+                    "match": "\\b(View|GetMetadata|AsKey)\\b"
                 },
                 {
                     "name": "entity.name.type.overload",
