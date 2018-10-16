@@ -48,10 +48,10 @@
         "definitions": {
             "patterns": [
                 {
-                    "include": "#function-declaration"
+                    "include": "#value-binding"
                 },
                 {
-                    "include": "#bindings"
+                    "include": "#function-declaration"
                 }
             ]
         },
@@ -103,6 +103,30 @@
                 }
             ]
         },
+        "value-binding": {
+            "patterns": [
+                {
+                    "match": "^ *(let|signal) +(_\\w+|[a-zA-Z]\\w*)(?: *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *(=)",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.overload"
+                        },
+                        "2": {
+                            "name": "variable.name.overload"
+                        },
+                        "3": {
+                            "name": "keyword.operator.type.annotation.overload"
+                        },
+                        "4": {
+                            "name": "entity.name.type"
+                        },
+                        "5": {
+                            "name": "keyword.operator.assignment.overload"
+                        }
+                    }
+                }
+            ]
+        },
         "function-declaration": {
             "name": "meta.function.overload",
             "begin": "(^ *)(?=let +)",
@@ -147,33 +171,6 @@
                             }
                         }
                     ]
-                }
-            ]
-        },
-        "bindings": {
-            "patterns": [
-                {
-                    "begin": "^ *(let|signal) +(_\\w+|[a-zA-Z]\\w*)(?: *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *",
-                    "beginCaptures": {
-                        "1": {
-                            "name": "keyword.other.overload"
-                        },
-                        "2": {
-                            "name": "variable.name.overload"
-                        },
-                        "3": {
-                            "name": "keyword.operator.type.annotation.overload"
-                        },
-                        "4": {
-                            "name": "entity.name.type"
-                        }
-                    },
-                    "end": "=",
-                    "endCaptures": {
-                        "0": {
-                            "name": "keyword.operator.assignment.overload"
-                        }
-                    }
                 }
             ]
         },
