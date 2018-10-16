@@ -61,6 +61,28 @@
         "ghetto": {
             "patterns": [
                 {
+                    "begin": "\\s([a-z]\\w*)",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "variable.other.object.overload"
+                        }
+                    },
+                    "end": "(?=\\s)",
+                    "patterns": [
+                        {
+                            "match": "(\\.)(_\\w+|[a-zA-Z]\\w*)",
+                            "captures": {
+                                "1": {
+                                    "name": "punctuation.accessor.overload"
+                                },
+                                "2": {
+                                    "name": "variable.other.object.property.overload"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "entity.name.type.overload",
                     "match": "\\b[A-Z]\\w*\\b\\??"
                 }
