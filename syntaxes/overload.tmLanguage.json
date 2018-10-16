@@ -7,25 +7,16 @@
             "include": "#comments"
         },
         {
-            "include": "#expressions"
+            "include": "#keywords"
+        },
+        {
+            "include": "#literals"
         },
         {
             "include": "#definitions"
         },
         {
-            "name": "meta.scope-test.overload",
-            "begin": "scope",
-            "beginCaptures": {
-                "0": {
-                    "name": "keyword.other"
-                }
-            },
-            "end": "\\g<0>",
-            "endCaptures": {
-                "0": {
-                    "name": "keyword.other"
-                }
-            }
+            "include": "#ghetto"
         }
     ],
     "repository": {
@@ -38,13 +29,6 @@
                 }
             ]
         },
-        "expressions": {
-            "patterns": [
-                {
-                    "include": "#literals"
-                }
-            ]
-        },
         "definitions": {
             "patterns": [
                 {
@@ -52,6 +36,9 @@
                 },
                 {
                     "include": "#function-declaration"
+                },
+                {
+                    "include": "#field-assignment"
                 }
             ]
         },
@@ -65,6 +52,17 @@
                 },
                 {
                     "include": "#booleans"
+                },
+                {
+                    "include": "#tags"
+                }
+            ]
+        },
+        "ghetto": {
+            "patterns": [
+                {
+                    "name": "entity.name.type.overload",
+                    "match": "\\b[A-Z]\\w*\\b\\??"
                 }
             ]
         },
@@ -83,7 +81,7 @@
             "patterns": [
                 {
                     "name": "constant.numeric.overload",
-                    "match": "\\b(?<!\\.)([1-9]\\d*)(%|(px|s)?\\b)(?!\\.)"
+                    "match": "\\b(?<!\\.)(([1-9]\\d*|0))(%|(px|s)?\\b)(?!\\.)"
                 },
                 {
                     "name": "constant.numeric.overload",
@@ -103,21 +101,32 @@
                 }
             ]
         },
+        "tags": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.tag.overload",
+                    "match": "@(_\\w+|[a-zA-Z]\\w*)"
+                }
+            ]
+        },
         "value-binding": {
             "patterns": [
                 {
-                    "match": "^ *(let|signal) +(_\\w+|[a-zA-Z]\\w*)(?: *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *(=)",
+                    "match": "^ *(let|signal) +(?:(public) +)?(_\\w+|[a-zA-Z]\\w*)(?: *(:) +((_\\w+|[a-zA-Z]\\w*)\\??))? *(=)",
                     "captures": {
                         "1": {
                             "name": "keyword.other.overload"
                         },
                         "2": {
-                            "name": "variable.name.overload"
+                            "name": "storage.modifier.overload"
                         },
                         "3": {
-                            "name": "keyword.operator.type.annotation.overload"
+                            "name": "variable.name.overload"
                         },
                         "4": {
+                            "name": "keyword.operator.type.annotation.overload"
+                        },
+                        "5": {
                             "name": "entity.name.type"
                         },
                         "6": {
@@ -134,12 +143,15 @@
             "patterns": [
                 {
                     "name": "meta.function.keyword-and-name",
-                    "match": "(let) +(_\\w+|[a-zA-Z]\\w*)\\s+",
+                    "match": "(let) +(?:(public) +)?(_\\w+|[a-zA-Z]\\w*)\\s+",
                     "captures": {
                         "1": {
                             "name": "keyword.other.overload"
                         },
                         "2": {
+                            "name": "storage.modifier.overload"
+                        },
+                        "3": {
                             "name": "entity.name.function.overload"
                         }
                     }
@@ -163,15 +175,40 @@
                 }
             ]
         },
+        "field-assignment": {
+            "patterns": [
+                {
+                    "match": "(_\\w+|[a-zA-Z]\\w*)(?: *(:) +(_\\w+|[a-zA-Z]\\w*))? *(=)",
+                    "captures": {
+                        "1": {
+                            "name": "entity.name.variable.field.overload"
+                        },
+                        "2": {
+                            "name": "keyword.operator.type.annotation.overload"
+                        },
+                        "3": {
+                            "name": "entity.name.type"
+                        },
+                        "4": {
+                            "name": "keyword.operator.assignment.overload"
+                        }
+                    }
+                }
+            ]
+        },
         "keywords": {
             "patterns": [
                 {
                     "name": "keyword.control.overload",
-                    "match": "raise"
+                    "match": "\\braise\\b"
+                },
+                {
+                    "name": "keyword.other.overload",
+                    "match": "\\b(if|then|elif|else|not|and|or|with)\\b"
                 },
                 {
                     "name": "support.type.primitive.overload",
-                    "match": "(bool|float|int|color)"
+                    "match": "\\b(bool|float|int|color)\\b"
                 }
             ]
         }
