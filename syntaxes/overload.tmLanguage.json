@@ -11,6 +11,21 @@
         },
         {
             "include": "#definitions"
+        },
+        {
+            "name": "meta.scope-test.overload",
+            "begin": "scope",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.other"
+                }
+            },
+            "end": "\\g<0>",
+            "endCaptures": {
+                "0": {
+                    "name": "keyword.other"
+                }
+            }
         }
     ],
     "repository": {
@@ -27,16 +42,16 @@
             "patterns": [
                 {
                     "include": "#literals"
-                },
-                {
-                    "include": "#bindings"
                 }
             ]
         },
         "definitions": {
             "patterns": [
                 {
-                    "include": "#function-definition"
+                    "include": "#function-declaration"
+                },
+                {
+                    "include": "#bindings"
                 }
             ]
         },
@@ -88,19 +103,23 @@
                 }
             ]
         },
-        "function-definition": {
+        "function-declaration": {
             "name": "meta.function.overload",
-            "begin": "(^ *)(?=fun +)",
-            "end": "\\1",
+            "begin": "(^ *)(?=let +)",
+            "end": "(?<=@)",
             "patterns": [
                 {
                     "name": "meta.function.signature.overload",
-                    "begin": "(?=fun)",
-                    "end": "=",
+                    "begin": "(?=let)",
+                    "end": "(?<==)",
                     "patterns": [
                         {
+                            "name": "keyword.control.overload",
+                            "match": "@"
+                        },
+                        {
                             "name": "meta.function.keyword-and-name",
-                            "match": "(fun) +(_\\w+|[a-zA-Z]\\w*)\\s*",
+                            "match": "(let) +(_\\w+|[a-zA-Z]\\w*)\\s+",
                             "captures": {
                                 "1": {
                                     "name": "keyword.other.overload"
@@ -111,7 +130,10 @@
                             }
                         },
                         {
-                            "match": "((_\\w+|[a-zA-Z]\\w*)(?: *(:) +(\\g<2>))?)(?:(?: *; *|\\s*?\\n\\s*?)\\g<1>)*",
+                            "name": "meta.function.parameter",
+                            "begin": "\\s*",
+                            "end": "(;|\\n|=)",
+                            "match": "(_\\w+|[a-zA-Z]\\w*)(?: *(:) +(_\\w+|[a-zA-Z]\\w*))?",
                             "captures": {
                                 "1": {
                                     "name": "variable.parameter.overload"
