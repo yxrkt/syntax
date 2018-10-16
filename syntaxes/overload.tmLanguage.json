@@ -120,7 +120,7 @@
                         "4": {
                             "name": "entity.name.type"
                         },
-                        "5": {
+                        "6": {
                             "name": "keyword.operator.assignment.overload"
                         }
                     }
@@ -129,48 +129,37 @@
         },
         "function-declaration": {
             "name": "meta.function.overload",
-            "begin": "(^ *)(?=let +)",
-            "end": "(?<=@)",
+            "begin": "^ *(?=let)",
+            "end": "(?<==)",
             "patterns": [
                 {
-                    "name": "meta.function.signature.overload",
-                    "begin": "(?=let)",
-                    "end": "(?<==)",
-                    "patterns": [
-                        {
-                            "name": "keyword.control.overload",
-                            "match": "@"
+                    "name": "meta.function.keyword-and-name",
+                    "match": "(let) +(_\\w+|[a-zA-Z]\\w*)\\s+",
+                    "captures": {
+                        "1": {
+                            "name": "keyword.other.overload"
                         },
-                        {
-                            "name": "meta.function.keyword-and-name",
-                            "match": "(let) +(_\\w+|[a-zA-Z]\\w*)\\s+",
-                            "captures": {
-                                "1": {
-                                    "name": "keyword.other.overload"
-                                },
-                                "2": {
-                                    "name": "entity.name.function.overload"
-                                }
-                            }
-                        },
-                        {
-                            "name": "meta.function.parameter",
-                            "begin": "\\s*",
-                            "end": "(;|\\n|=)",
-                            "match": "(_\\w+|[a-zA-Z]\\w*)(?: *(:) +(_\\w+|[a-zA-Z]\\w*))?",
-                            "captures": {
-                                "1": {
-                                    "name": "variable.parameter.overload"
-                                },
-                                "2": {
-                                    "name": "keyword.operator.type.annotation.overload"
-                                },
-                                "3": {
-                                    "name": "entity.name.type"
-                                }
-                            }
+                        "2": {
+                            "name": "entity.name.function.overload"
                         }
-                    ]
+                    }
+                },
+                {
+                    "name": "meta.function.parameter",
+                    "begin": "\\s*",
+                    "end": ";|\\n|=",
+                    "match": "(_\\w+|[a-zA-Z]\\w*)(?: *(:) +(_\\w+|[a-zA-Z]\\w*))?",
+                    "captures": {
+                        "1": {
+                            "name": "variable.parameter.overload"
+                        },
+                        "2": {
+                            "name": "keyword.operator.type.annotation.overload"
+                        },
+                        "3": {
+                            "name": "entity.name.type"
+                        }
+                    }
                 }
             ]
         },
