@@ -17,14 +17,14 @@ let public View(vm: FriendVM, index: int, refresh: bool) =
     raise introTimer.Reset if refresh
 
     signal programStates = [Signal.AnimationStates]
-        ActiveState = vm.Category | AsTag
-        [State] @Overwatch
+        ActiveState = vm.Category | ToString
+        [State] 'Overwatch'
             PlayerTileBackground = DarkBlue
             PlayerTileForeground = White
-        [State] @NonOverwatch
+        [State] 'NonOverwatch'
             PlayerTileBackground = NonOverwatchFriend
-        [State] @Online
-        [State] @Offline
+        [State] 'Online'
+        [State] 'Offline'
             PlayerTileOpacity = 70%
             PlayerTileBackground = DarkBlue with A = 20%
             PlayerTileForeground = Black
@@ -73,7 +73,7 @@ let public View(vm: FriendVM, index: int, refresh: bool) =
                                 BackgroundContent =
                                     [Image]
                                         IsHitTestVisible = false
-                                        Source = Enum.GetMetadata(vm.Program, @Texture)
+                                        Source = Enum.GetMetadata(vm.Program, 'Texture')
                                         Width = 468px
                                         HorizontalAlignment = Left
                                 Tag =
