@@ -1,0 +1,87 @@
+let public View(vm: FriendVM, index: int, refresh: bool) =
+    signal introTimer = [Signal.Timer] Interval = 0.2s * index
+    signal introAnimation = [Signal.AnimationStoryboard]
+        if not introTimer.Finished
+            Opacity = 0%
+        else
+            Opacity =
+                [KeyFrame] KeyTime = 0s, Value = 0%
+                [KeyFrame] KeyTime = 0.3s, Value = 100%
+            Offset =
+                [KeyFrame] KeyTime = 0s, Value = -50px
+                [KeyFrame] KeyTime = 0.2s, Value = 0px, EasingFunction = [CircleEase]
+            Scale =
+                [KeyFrame] KeyTime = 0s, Value = 0%
+                [KeyFrame] KeyTime = 0.1s, Value = 100%, EasingFunction = [CircleEase]
+
+    raise introTimer.Reset if refresh
+
+    signal programStates = [Signal.AnimationStates]
+        ActiveState = vm.Category | AsTag
+        [State] @Overwatch
+            PlayerTileBackground = DarkBlue
+            PlayerTileForeground = White
+        [State] @NonOverwatch
+            PlayerTileBackground = NonOverwatchFriend
+        [State] @Online
+        [State] @Offline
+            PlayerTileOpacity = 70%
+            PlayerTileBackground = DarkBlue with A = 20%
+            PlayerTileForeground = Black
+
+    let showInviteButton =
+        vm.InviteToParty.CanExecute and
+        Signal.InputDevice.IsKeyboardActive and
+        vm.Program = Overwatch and
+        not vm.InMyParty
+
+    [Grid]
+        Width = 460px
+        Opacity = introStates.Opacity
+        [DockPanel]
+            RenderTransform =
+                [TransformGroup]
+                    [ScaleTransform] Y = introStates.Scale
+                    [TranslateTransform] X = introStates.Offset
+            [SharpButton if showInviteButton]
+                IsTabStop = false
+                Dock = Right
+                Margin = 4,0,0,0
+                MinWidth = PlayerTileButtonMinWidth
+                Command = vm.InviteToParty
+                ToolTip = vm.InviteToPartyTip
+                [Svg]
+                    Source = 'res://svg/plus-icon'
+                    Width = 20px
+                    Foreground = White
+            [Grid]
+                [Rectangle]
+                    StrokeThickness = 0
+                    Stroke = Orange
+                [FocusableItem]
+                    Handlers = raise [OpenContextMenu if [Signal.Gamepad].Select]
+                    ContextMenu = PlayerContextMenu(vm)
+                    [DockPanel]
+                        View(vm.Status)
+                        [Grid]
+                            [PlayerTile]
+                                Handlers = raise [InvokeCommand if [Signal.Mouse].DoubleLeftClick] vm.Whisper
+                                Player = vm
+                                Foreground = programStates.PlayerTileForeground
+                                Background = programStates.PlayerTileBackground
+                                Opacity = programStates.PlayerTileOpacity
+                                BackgroundContent =
+                                    [Image]
+                                        IsHitTestVisible = false
+                                        Source = Enum.GetMetadata(vm.Program, @Texture)
+                                        Width = 468px
+                                        HorizontalAlignment = Left
+                                Tag =
+                                    [Svg if vm.IsFavorite]
+                                        Source = 'res://svg/favorite-icon'
+                                        VerticalAlignment = Top
+                                        Margin = 4,2,0,0
+                            [PartyLeaderIcon if vm.PartyState = Leader]
+                                Foreground = Party
+                                HorizontalAlignment = Right
+                                Margin = 10,0
