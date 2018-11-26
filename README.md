@@ -23,4 +23,4 @@ Integrated feedback from Ryan and Keith, such as
 
 ### 0.1
 
-Initial version of UI language.
+- Initial version of UI language
