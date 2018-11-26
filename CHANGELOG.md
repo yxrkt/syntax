@@ -1,7 +1,19 @@
 # Change Log
 All notable changes to the "overload" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### 0.3
 
-## [Unreleased]
-- Initial release
+- Iteration on design for element-specific logic (ex: mouse event handlers)
+- Removed signal keyword (signals now just look like regular let bindings)
+- Removed requirement for namespace qualification (ex: `Mouse` instead of `Signal.Mouse`)
+
+### 0.2
+
+Integrated feedback from Ryan and Keith, such as
+- Using square brackets around types for 'new' expressions
+- Suffix `if` syntax
+- Removed tagging and tag type (just using 'strings' now)
+
+### 0.1
+
+- Initial version of UI language

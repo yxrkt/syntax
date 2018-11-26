@@ -1,6 +1,6 @@
 let public View(vm: FriendVM, index: int, refresh: bool) =
-    signal introTimer = [Signal.Timer] Interval = 0.2s * index
-    signal introAnimation = [Signal.AnimationStoryboard]
+    let introTimer = [Timer] Interval = 0.2s * index
+    let introAnimation = [AnimationStoryboard]
         if not introTimer.Finished
             Opacity = 0%
         else
@@ -14,9 +14,9 @@ let public View(vm: FriendVM, index: int, refresh: bool) =
                 [KeyFrame] KeyTime = 0s, Value = 0%
                 [KeyFrame] KeyTime = 0.1s, Value = 100%, EasingFunction = [CircleEase]
 
-    raise introTimer.Reset if refresh
+    [RaiseEvent if refresh] introTimer.Reset
 
-    signal programStates = [Signal.AnimationStates]
+    let programStates = [AnimationStates]
         ActiveState = vm.Category | ToString
         [State] 'Overwatch'
             PlayerTileBackground = DarkBlue
@@ -31,7 +31,7 @@ let public View(vm: FriendVM, index: int, refresh: bool) =
 
     let showInviteButton =
         vm.InviteToParty.CanExecute and
-        Signal.InputDevice.IsKeyboardActive and
+        InputDevice.IsKeyboardActive and
         vm.Program = Overwatch and
         not vm.InMyParty
 
@@ -59,13 +59,15 @@ let public View(vm: FriendVM, index: int, refresh: bool) =
                     StrokeThickness = 0
                     Stroke = Orange
                 [FocusableItem]
-                    Handlers = raise [OpenContextMenu if [Signal.Gamepad].Select]
+                    LogicalInputHandlers(input) =
+                        [OpenContextMenu if input.Select.WentDown]
                     ContextMenu = PlayerContextMenu(vm)
                     [DockPanel]
                         View(vm.Status)
                         [Grid]
                             [PlayerTile]
-                                Handlers = raise [InvokeCommand if [Signal.Mouse].DoubleLeftClick] vm.Whisper
+                                MouseHandlers(mouse) =
+                                    [InvokeCommand if mouse.LeftButton.DoubleClick] vm.Whisper
                                 Player = vm
                                 Foreground = programStates.PlayerTileForeground
                                 Background = programStates.PlayerTileBackground
